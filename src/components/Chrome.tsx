@@ -19,7 +19,7 @@ export function Header({ announce }: { announce?: { text?: string; show?: boolea
   useEffect(() => { if (!path.startsWith('/admin')) track('page_view'); }, [path]);
 
   const go = (e: React.FormEvent) => { e.preventDefault(); if (!q.trim()) return; track('search', { search: q }); router.push(`/shop?q=${encodeURIComponent(q)}`); };
-  if (path.startsWith('/admin')) return null;
+  if (path.startsWith('/admin') || path.startsWith('/invoice')) return null;
 
   return (
     <>
@@ -51,10 +51,10 @@ export function Header({ announce }: { announce?: { text?: string; show?: boolea
   );
 }
 
-export function Footer({ social, line }: { social?: Record<string, string>; line?: string }) {
+export function Footer({ social, line, credit }: { social?: Record<string, string>; line?: string; credit?: { show?: boolean; text?: string; link?: string } }) {
   const path = usePathname();
   const [done, setDone] = useState(false);
-  if (path.startsWith('/admin')) return null;
+  if (path.startsWith('/admin') || path.startsWith('/invoice')) return null;
   const sub = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const email = new FormData(e.currentTarget).get('email');
@@ -84,7 +84,7 @@ export function Footer({ social, line }: { social?: Record<string, string>; line
           </div>
         </div>
       </div>
-      <div className="wrap py-6 border-t border-paper/10 meta opacity-50 flex justify-between"><span>© {new Date().getFullYear()} VEST</span><span>Independent Graphic Apparel</span></div>
+      <div className="wrap py-6 border-t border-paper/10 meta opacity-50 flex justify-between"><span>© {new Date().getFullYear()} VEST</span><span>{credit?.show && credit.text ? (credit.link ? <a href={credit.link} target="_blank" rel="noopener" className="hover:opacity-100 underline-offset-4 hover:underline">{credit.text}</a> : credit.text) : 'Independent Graphic Apparel'}</span></div>
     </footer>
   );
 }

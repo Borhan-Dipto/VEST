@@ -38,7 +38,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <CartProvider>
           <Header announce={s.announce} />
           <main>{children}</main>
-          <Footer social={s.social} line={s.statement?.footer} />
+          <Footer social={s.social} line={s.statement?.footer} credit={s.credit} />
         </CartProvider>
       </body>
     </html>

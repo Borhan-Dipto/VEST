@@ -16,10 +16,12 @@ const SECTIONS: [string, string, string][] = [
   ['seo', 'Site SEO', 'Default title and description for Google and link previews.'],
   ['social', 'Social links & contact', 'Full URLs, e.g. https://instagram.com/yourpage'],
   ['policies', 'Policy pages', 'Each new line becomes a paragraph.'],
+  ['business', 'Business info (shown on invoices)', 'Name, contact and the thank-you note printed on every invoice.'],
+  ['credit', 'Footer developer credit', 'Untick Show to hide it. Note: showing the same credit as another site can link the two brands.'],
 ];
 const LABEL: Record<string, string> = { kicker: 'Small top label', title: 'Headline', title2: 'Headline line 2 (orange)', text: 'Text', cta: 'Button text', link: 'Button link', image: 'Image', show: 'Show',
   line1: 'Statement line 1', line2: 'Statement line 2 (orange)', sub: 'Small text under statement', footer: 'Footer big line', inside: 'Inside Dhaka', outside: 'Outside Dhaka', free_over: 'Free delivery over',
-  care: 'Care instructions', delivery: 'Delivery & exchange text', print: 'Print description', size_note: 'Size guide note', size_chart: 'Size chart', items: 'Items', sizes: 'Sizes', colors: 'Colours', body: 'Text', description: 'Description' };
+  care: 'Care instructions', delivery: 'Delivery & exchange text', print: 'Print description', size_note: 'Size guide note', size_chart: 'Size chart', items: 'Items', sizes: 'Sizes', colors: 'Colours', body: 'Text', description: 'Description', name: 'Business name', phone: 'Phone', email: 'Email', website: 'Website', address: 'Address', invoice_note: 'Invoice thank-you note' };
 const NUMERIC = new Set(['inside', 'outside', 'free_over']);
 
 export default function Settings() {

@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import { use, useEffect, useState } from 'react';
 import { db, fmt, when, STATUS, PROD } from '@/lib/admin';
+import { orderCode } from '@/lib/order';
 
 export default function OrderDetail({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
@@ -25,10 +26,10 @@ export default function OrderDetail({ params }: { params: Promise<{ id: string }
     <div className="max-w-5xl">
       <style>{`@media print { aside, .no-print { display: none !important } main { padding: 0 !important } .print-only { display: block !important } }`}</style>
       <div className="flex flex-wrap justify-between items-center gap-3 mb-6 no-print">
-        <div><Link href="/admin/orders" className="meta underline">← Orders</Link><h1 className="display text-5xl mt-1">Order #{o.order_no}</h1><p className="meta opacity-60">{when(o.created_at)} · {o.payment_method.toUpperCase()}</p></div>
+        <div><Link href="/admin/orders" className="meta underline">← Orders</Link><h1 className="display text-5xl mt-1">Order <span className="font-mono">{orderCode(o.order_no)}</span></h1><p className="meta opacity-60">{when(o.created_at)} · {o.payment_method.toUpperCase()}</p></div>
         <div className="flex gap-2 items-center">{msg && <span className="meta">{msg}</span>}
           <a href={`tel:${o.phone}`} className="btn btn-ghost !h-11">Call</a>
-          <button onClick={() => window.print()} className="btn btn-ghost !h-11">Print invoice</button>
+          <a href={`/invoice/${orderCode(o.order_no)}?dl=1#${encodeURIComponent(o.phone)}`} target="_blank" className="btn btn-ghost !h-11">Download invoice</a>
           <button onClick={() => save()} className="btn !h-11">Save</button></div>
       </div>
 

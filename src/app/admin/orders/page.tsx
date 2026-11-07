@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { db, fmt, when, STATUS, PROD } from '@/lib/admin';
+import { orderCode } from '@/lib/order';
 
 export default function Orders() {
   const [list, setList] = useState<any[]>([]);
@@ -15,13 +16,13 @@ export default function Orders() {
   };
   useEffect(() => { load(); }, [st, pr]);
 
-  const shown = list.filter((o) => !q || `${o.order_no} ${o.customer_name} ${o.phone}`.toLowerCase().includes(q.toLowerCase()));
+  const shown = list.filter((o) => !q || `${orderCode(o.order_no)} ${o.order_no} ${o.customer_name} ${o.phone}`.toLowerCase().includes(q.toLowerCase()));
   const update = async (ids: string[], patch: any) => { await db.from('orders').update(patch).in('id', ids); setSel([]); load(); };
 
   const csv = () => {
     const rows = shown.filter((o) => !sel.length || sel.includes(o.id));
     const head = ['Invoice', 'Name', 'Phone', 'Address', 'District', 'Area', 'COD Amount', 'Items', 'Note', 'Status', 'Date', 'Source'];
-    const body = rows.map((o) => [o.order_no, o.customer_name, o.phone, o.address, o.district, o.area || '', o.payment_status === 'paid' ? 0 : o.total,
+    const body = rows.map((o) => [orderCode(o.order_no), o.customer_name, o.phone, o.address, o.district, o.area || '', o.payment_status === 'paid' ? 0 : o.total,
       o.items.map((i: any) => `${i.title} ${i.size}/${i.color} x${i.qty}`).join('; '), o.note || '', o.status, o.created_at.slice(0, 10), o.utm?.utm_source || '']);
     const text = [head, ...body].map((r) => r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(',')).join('\n');
     const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob(['﻿' + text], { type: 'text/csv' })); a.download = `vest-orders-${new Date().toISOString().slice(0, 10)}.csv`; a.click();
@@ -53,7 +54,7 @@ export default function Orders() {
           <tbody>{shown.map((o) => (
             <tr key={o.id} className="border-t border-warm align-top">
               <td className="p-3"><input type="checkbox" checked={sel.includes(o.id)} onChange={(e) => setSel(e.target.checked ? [...sel, o.id] : sel.filter((x) => x !== o.id))} /></td>
-              <td className="py-3"><Link href={`/admin/orders/${o.id}`} className="font-medium underline">#{o.order_no}</Link></td>
+              <td className="py-3"><Link href={`/admin/orders/${o.id}`} className="font-mono font-medium underline">{orderCode(o.order_no)}</Link></td>
               <td className="py-3">{o.customer_name}<div className="opacity-60">{o.phone} · {o.district}</div></td>
               <td className="py-3 max-w-[200px]">{o.items.map((i: any, k: number) => <div key={k} className="truncate">{i.qty}× {i.title} <span className="opacity-60">{i.size}/{i.color}</span></div>)}</td>
               <td className="py-3">{fmt(o.total)}</td>

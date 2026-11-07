@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { db, fmt, when } from '@/lib/admin';
+import { orderCode } from '@/lib/order';
 export default function Customers() {
   const [orders, setOrders] = useState<any[]>([]); const [subs, setSubs] = useState<any[]>([]); const [q, setQ] = useState(''); const [tab, setTab] = useState('customers');
   useEffect(() => {
@@ -29,7 +30,7 @@ export default function Customers() {
           <details key={c.phone} className="p-3">
             <summary className="flex flex-wrap gap-3 cursor-pointer items-center"><span className="font-medium flex-1">{c.name} <span className="opacity-60 font-normal">{c.phone} · {c.district}</span></span>
               <span className={`meta px-2 py-1 ${seg(c) === 'Loyal' ? 'bg-lime' : 'bg-paper'}`}>{seg(c)}</span><span className="text-sm">{c.orders.length} orders · {fmt(c.spent)}</span></summary>
-            <div className="mt-2 text-sm">{c.orders.map((o: any) => <Link key={o.id} href={`/admin/orders/${o.id}`} className="flex justify-between py-1 underline-offset-2 hover:underline"><span>#{o.order_no} · {o.status}</span><span>{fmt(o.total)} · {when(o.created_at)}</span></Link>)}</div>
+            <div className="mt-2 text-sm">{c.orders.map((o: any) => <Link key={o.id} href={`/admin/orders/${o.id}`} className="flex justify-between py-1 underline-offset-2 hover:underline"><span>{orderCode(o.order_no)} · {o.status}</span><span>{fmt(o.total)} · {when(o.created_at)}</span></Link>)}</div>
           </details>
         ))}</div>
       </> : <>

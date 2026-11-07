@@ -79,7 +79,7 @@ export default function BuyBox({ p, chart = [], note }: { p: Product; chart?: (s
         <button onClick={() => go(true)} className="btn !bg-lime !text-ink w-full mt-3">Buy now — Cash on delivery</button>
 
         <ul className="mt-8 space-y-3 text-sm opacity-80 border-t border-ink/10 pt-6">
-          <li>✦ {p.fit} fit · {p.gsm} GSM · {p.fabric}</li><li>✦ DTF print — vivid, flexible, wash-safe</li><li>✦ Delivery 1–5 days · Exchange within 3 days</li>
+          <li>✦ {p.fit} fit · {p.gsm} GSM · {p.fabric}</li><li>✦ DTF print — vivid, flexible, wash-safe</li><li>✦ Delivery in 1–5 days · Cash on delivery</li>
         </ul>
       </div>
 

@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { db, fmt, when } from '@/lib/admin';
+import { orderCode } from '@/lib/order';
 
 const RANGES: [string, number][] = [['Today', 0], ['7 days', 7], ['30 days', 30], ['All time', 3650]];
 
@@ -58,7 +59,7 @@ export default function Dashboard() {
           <div className="flex justify-between mb-3"><span className="meta opacity-60">Recent orders</span><Link href="/admin/orders" className="meta underline">All orders</Link></div>
           <table className="w-full text-sm"><tbody>{orders.slice(0, 10).map((o) => (
             <tr key={o.id} className="border-t border-warm">
-              <td className="py-2"><Link href={`/admin/orders/${o.id}`} className="font-medium underline">#{o.order_no}</Link></td>
+              <td className="py-2"><Link href={`/admin/orders/${o.id}`} className="font-mono font-medium underline">{orderCode(o.order_no)}</Link></td>
               <td className="truncate max-w-[120px]">{o.customer_name}</td><td>{fmt(o.total)}</td>
               <td><span className="meta bg-paper px-2 py-1">{o.status}</span></td><td className="hidden sm:table-cell opacity-60">{when(o.created_at)}</td>
             </tr>
