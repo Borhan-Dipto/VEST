@@ -53,6 +53,7 @@ export default function ProductEdit({ params }: { params: Promise<{ id: string }
   const move = (i: number, d: number) => setImgs((x) => { const a = [...x]; const j = i + d; if (j < 0 || j >= a.length) return a; [a[i], a[j]] = [a[j], a[i]]; return a; });
 
   const save = async (asCopy = false) => {
+    (document.activeElement as HTMLElement | null)?.blur?.(); await new Promise((r) => setTimeout(r, 0));
     if (!p.title || !p.slug || !p.price) return setMsg('Title, URL and price are required.');
     if (!sizes.length || !colors.length) return setMsg('Pick at least one size and one colour.');
     setBusy(true); setMsg('');
@@ -149,7 +150,7 @@ export default function ProductEdit({ params }: { params: Promise<{ id: string }
             <L t="Collection"><select value={p.collection_id} onChange={(e) => set('collection_id', e.target.value)} className="input"><option value="">— None —</option>{cols.map((c) => <option key={c.id} value={c.id}>{c.title}</option>)}</select></L>
             <L t="Badge"><select value={p.badge} onChange={(e) => set('badge', e.target.value)} className="input"><option value="">None</option>{['NEW', 'TRENDING', 'BEST SELLER', 'LIMITED'].map((b) => <option key={b}>{b}</option>)}</select></L>
             <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={p.featured} onChange={(e) => set('featured', e.target.checked)} /> Featured</label>
-            <L t="Tags (comma separated — used in search)"><input value={(p.tags || []).join(', ')} onChange={(e) => set('tags', e.target.value.split(',').map((t) => t.trim().toLowerCase()).filter(Boolean))} className="input" /></L>
+            <L t="Tags (comma separated — used in search)"><input defaultValue={(p.tags || []).join(', ')} key={p.id || 'new'} onBlur={(e) => set('tags', e.target.value.split(',').map((t) => t.trim().toLowerCase()).filter(Boolean))} className="input" placeholder="night, typography, oversized" /></L>
           </section>
           <section className="bg-card p-4 space-y-3">
             <L t="Fabric"><input value={p.fabric || ''} onChange={(e) => set('fabric', e.target.value)} className="input" /></L>
