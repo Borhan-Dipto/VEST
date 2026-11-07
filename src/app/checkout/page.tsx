@@ -19,6 +19,7 @@ const DIV: Record<string, string> = {
 const ERR: Record<string, string> = {
   INVALID_CUSTOMER: 'Please check your name, phone number (01XXXXXXXXX) and address.', EMPTY_CART: 'Your bag is empty.',
   INVALID_COUPON: 'That coupon is not valid for this order.', ITEM_UNAVAILABLE: 'An item is no longer available.', OUT_OF_STOCK: 'Some items just sold out. Please update your bag.',
+  TOO_MANY_ORDERS: 'You have placed several orders in the last hour. Please wait a bit or contact us on Facebook.',
 };
 
 export default function Checkout() {

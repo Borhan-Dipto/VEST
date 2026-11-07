@@ -27,12 +27,11 @@ export function Header({ announce }: { announce?: { text?: string; show?: boolea
       <header className="sticky top-0 z-40 bg-paper/90 backdrop-blur border-b border-ink/10">
         <div className="wrap h-16 flex items-center justify-between gap-4">
           <button className="md:hidden meta h-9 px-3 border border-ink/20 hover:border-ink" onClick={() => setMenu(!menu)} aria-label="Menu">{menu ? 'Close' : 'Menu'}</button>
-          <Link href="/" className="display text-4xl tracking-tight">VEST<sup className="text-xs align-top font-mono">™</sup></Link>
+          <Link href="/" className="brand-mark" aria-label="VEST home"><img src="/v-mark.png" alt="" width="34" height="26" /><span>VEST</span></Link>
           <nav className="hidden md:flex gap-10 meta">{NAV.map(([t, h]) => <Link key={t} href={h} className="hover:underline underline-offset-4">{t}</Link>)}</nav>
           <div className="flex items-center gap-2 sm:gap-3 meta">
             <button onClick={() => setSearch(!search)} aria-label="Search" className="h-9 px-3 border border-ink/20 hover:border-ink">Search</button>
             <Link href="/wishlist" className="hidden sm:inline-flex items-center h-9 px-3 border border-ink/20 hover:border-ink">Saved({wish.length})</Link>
-            <Link href="/account" className="hidden sm:inline-flex items-center h-9 px-3 border border-ink/20 hover:border-ink">Account</Link>
             <button onClick={() => setOpen(true)} className="h-9 px-3 border border-ink bg-ink text-paper hover:bg-lime hover:text-ink">Bag({count})</button>
           </div>
         </div>
@@ -43,7 +42,7 @@ export function Header({ announce }: { announce?: { text?: string; show?: boolea
         )}
         {menu && (
           <nav className="md:hidden border-t border-ink/10 wrap py-6 flex flex-col gap-3">
-            {[...NAV, ['Saved', '/wishlist'], ['Account', '/account'], ['Track Order', '/track']].map(([t, h]) => <Link key={t} href={h} className="display text-5xl">{t}</Link>)}
+            {[...NAV, ['Saved', '/wishlist'], ['Track Order', '/track']].map(([t, h]) => <Link key={t} href={h} className="display text-5xl">{t}</Link>)}
           </nav>
         )}
       </header>
@@ -65,6 +64,7 @@ export function Footer({ social, line, credit }: { social?: Record<string, strin
     <footer className="bg-ink text-paper mt-24">
       <div className="wrap py-16 grid gap-12 md:grid-cols-2">
         <div>
+          <img src="/v-mark.png" alt="" width="52" height="40" className="mb-8" />
           <p className="display text-6xl md:text-8xl max-w-xl">{line || 'Never blend in.'}</p>
           <form onSubmit={sub} className="mt-8 flex gap-3 max-w-md">
             <input name="email" type="email" required placeholder="Email for drop alerts" className="input !bg-transparent !border-paper/30 text-paper" />

@@ -21,15 +21,17 @@ export async function generateMetadata(): Promise<Metadata> {
   metadataBase: new URL(SITE),
   title: { default: seo.title || 'VEST', template: '%s — VEST' },
   description: seo.description,
-  openGraph: { siteName: 'VEST', type: 'website', locale: 'en_BD' },
+  openGraph: { siteName: 'VEST', type: 'website', locale: 'en_BD', images: [{ url: '/og.jpg', width: 1200, height: 630, alt: 'VEST — Premium DTF printed graphic t-shirts' }] },
+  manifest: '/manifest.webmanifest',
+  appleWebApp: { title: 'VEST', statusBarStyle: 'black-translucent' },
   twitter: { card: 'summary_large_image' },
   };
 }
-export const viewport: Viewport = { themeColor: '#111111', width: 'device-width', initialScale: 1 };
+export const viewport: Viewport = { themeColor: '#0B0B0F', width: 'device-width', initialScale: 1 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const s = await getSettings();
-  const org = { '@context': 'https://schema.org', '@type': 'Organization', name: 'VEST', url: SITE, logo: `${SITE}/icon.svg` };
+  const org = { '@context': 'https://schema.org', '@type': 'Organization', name: 'VEST', url: SITE, logo: `${SITE}/logo-full.png` };
   return (
     <html lang="en">
       <body>

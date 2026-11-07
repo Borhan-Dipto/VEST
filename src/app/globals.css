@@ -1,12 +1,12 @@
 @import "tailwindcss";
 
 @theme {
-  --color-ink: #111111;
-  --color-paper: #F5F2EC;
+  --color-ink: #0B0B0F;
+  --color-paper: #F5F1E8;
   --color-card: #FFFFFF;
-  --color-warm: #D8D4CC;
-  --color-lime: #D8FF3E;
-  --color-signal: #FF5738;
+  --color-warm: #DDD6C8;
+  --color-lime: #C9A961;
+  --color-signal: #9C7F45;
   --font-display: 'Anton', Impact, sans-serif;
   --font-sans: 'Space Grotesk', system-ui, sans-serif;
   --font-serif: 'Instrument Serif', Georgia, serif;
@@ -47,3 +47,9 @@ body { font-family: var(--font-sans); overflow-x: hidden; }
 .img-zoom:hover img { transform: scale(1.05); }
 
 @media (prefers-reduced-motion: reduce) { .marquee, .reveal { animation: none; } .img-zoom img { transition: none; } }
+
+/* VEST gold wordmark + metallic V */
+.brand-mark { display: inline-flex; align-items: center; gap: 12px; }
+.brand-mark img { height: 26px; width: auto; filter: drop-shadow(0 1px 0 rgba(0,0,0,.25)); }
+.brand-mark span { font-family: var(--font-sans); font-weight: 400; font-size: 22px; letter-spacing: .42em; margin-right: -.42em; text-transform: uppercase; }
+.text-gold-sheen { background: linear-gradient(180deg, #F0D696 0%, #BE9A58 45%, #7A5C2A 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
