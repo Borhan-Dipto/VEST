@@ -33,6 +33,7 @@ export default function Invoice({ params }: { params: Promise<{ no: string }> })
     setBusy(false);
   };
   useEffect(() => { if (o && new URLSearchParams(location.search).get('dl') === '1') download(); }, [o]);
+  useEffect(() => { if (o) document.title = `Invoice ${orderCode(o.order_no)} — VEST`; }, [o]);
 
   if (o === undefined) return <div className="min-h-screen grid place-items-center meta">Loading invoice…</div>;
   if (o === null) return <div className="min-h-screen grid place-items-center text-center p-6"><div><p className="display text-5xl">Invoice not found</p><p className="mt-3 opacity-60">Open it from your order tracking page.</p><a href="/track" className="btn mt-6">Track order</a></div></div>;
@@ -40,7 +41,6 @@ export default function Invoice({ params }: { params: Promise<{ no: string }> })
   const paid = o.payment_status === 'paid';
   const due = paid ? 0 : o.total;
   const addr = [o.address, o.area, o.district, o.division].filter(Boolean).filter((x: string, i: number, a: string[]) => a.findIndex((y) => y.trim().toLowerCase() === x.trim().toLowerCase()) === i && !(i > 0 && String(o.address).toLowerCase().includes(x.trim().toLowerCase()))).join(', ');
-  useEffect(() => { if (o) document.title = `Invoice ${orderCode(o.order_no)} — VEST`; }, [o]);
 
   return (
     <div style={{ background: '#EDEAE3', minHeight: '100vh', padding: '24px 12px' }}>
