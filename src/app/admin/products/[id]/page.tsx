@@ -3,9 +3,10 @@ import { use, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { db, upload, slugify, refreshSite, postToSocials } from '@/lib/admin';
+import { buildHashtags } from '@/lib/hashtags';
 
 const BLANK = { title: '', slug: '', description: '', price: 850, compare_price: null as number | null, collection_id: '', badge: '', fabric: '100% Cotton', gsm: 180, fit: 'Oversized',
-  status: 'draft', featured: false, tags: [] as string[], seo_title: '', seo_desc: '', social_skip: false };
+  status: 'draft', featured: false, tags: [] as string[], seo_title: '', seo_desc: '', social_skip: false, extra_hashtags: '' };
 type Img = { url: string };
 
 export default function ProductEdit({ params }: { params: Promise<{ id: string }> }) {
@@ -22,6 +23,8 @@ export default function ProductEdit({ params }: { params: Promise<{ id: string }
   const [busy, setBusy] = useState(false); const [msg, setMsg] = useState(''); const [up, setUp] = useState(false);
   const [defStock, setDefStock] = useState(10);
   const [social, setSocial] = useState('');
+  const [tagCfg, setTagCfg] = useState<any>({});
+  useEffect(() => { db.from('settings').select('value').eq('key', 'social_post').single().then(({ data }) => setTagCfg(data?.value || {})); }, []);
 
   useEffect(() => {
     db.from('collections').select('id,title').order('sort').then(({ data }) => setCols(data || []));
@@ -167,6 +170,10 @@ export default function ProductEdit({ params }: { params: Promise<{ id: string }
           <section className="bg-card p-4 space-y-3">
             <div className="meta">Social media</div>
             <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={!p.social_skip} onChange={(e) => set('social_skip', !e.target.checked)} /> Auto-post to Facebook & Instagram when published</label>
+            <label className="block"><span className="meta opacity-60 block mb-1">Extra hashtags (optional)</span>
+              <input defaultValue={p.extra_hashtags || ''} key={'ht' + (p.id || 'new')} onBlur={(e) => set('extra_hashtags', e.target.value)} placeholder="#NightOut #AnimeTee" className="input" /></label>
+            {(() => { const coll = cols.find((x) => x.id === p.collection_id); const ht = buildHashtags({ id: p.id || p.slug || 'new', tags: p.tags, fit: p.fit, extra_hashtags: p.extra_hashtags, collection: coll ? { title: coll.title } : null, colors }, tagCfg);
+              return <div className="text-xs space-y-1.5"><div><span className="meta opacity-60">Auto · Facebook </span>{ht.facebook.join(' ')}</div><div><span className="meta opacity-60">Auto · Instagram </span>{ht.instagram.join(' ')}</div></div>; })()}
             <p className="text-sm opacity-60">{p.social_posted_at ? `Posted on ${new Date(p.social_posted_at).toLocaleString('en-GB', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })}` : 'Not posted yet'}</p>
             {social && <p className={`text-sm ${social.includes('fail') || social.includes('Facebook:') || social.includes('Instagram:') ? 'text-signal' : ''}`}>{social}</p>}
             {!isNew && p.status === 'published' && <button type="button" onClick={async () => { setSocial('Posting…'); const m = await postToSocials(id, true); setSocial(m); if (m.includes('✓')) setP((x: any) => ({ ...x, social_posted_at: new Date().toISOString() })); }} className="btn btn-ghost !h-10 w-full">{p.social_posted_at ? 'Post again' : 'Post to socials now'}</button>}

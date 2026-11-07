@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { serverClient } from '@/lib/supabase';
+import { buildHashtags } from '@/lib/hashtags';
 
 // Posts a published product to the Facebook Page and Instagram (admin only).
 // Needs env: META_PAGE_ID, META_PAGE_TOKEN (System User token), META_IG_ID.
@@ -44,7 +45,7 @@ export async function POST(req: Request) {
   if (!PAGE || !TOKEN) return NextResponse.json({ skipped: 'Social posting is not connected yet.' });
 
   const [{ data: p }, { data: cfg }] = await Promise.all([
-    db.from('products').select('*, images:product_images(url,sort)').eq('id', product_id).single(),
+    db.from('products').select('*, images:product_images(url,sort), collection:collections(title), variants(color)').eq('id', product_id).single(),
     db.from('settings').select('value').eq('key', 'social_post').single(),
   ]);
   const c = cfg?.value || {};
@@ -59,14 +60,15 @@ export async function POST(req: Request) {
   if (!imgs.length) return NextResponse.json({ error: 'Add at least one JPG/PNG image first.' }, { status: 400 });
 
   const link = `${SITE}/product/${p.slug}`;
-  const fill = (t: string, cta = '') => String(t || '')
+  const tags = buildHashtags({ ...p, colors: [...new Set<string>((p.variants || []).map((v: any) => v.color))] }, c);
+  const fill = (t: string, cta = '', ht = '') => String(t || '')
     .replaceAll('{title}', p.title).replaceAll('{price}', String(p.price))
     .replaceAll('{compare}', p.compare_price ? `৳${p.compare_price}` : '').replaceAll('{description}', p.description || '')
-    .replaceAll('{cta}', cta).replaceAll('{link}', link).replaceAll('{hashtags}', c.hashtags || '').replace(/\n{3,}/g, '\n\n').trim();
+    .replaceAll('{cta}', cta).replaceAll('{link}', link).replaceAll('{hashtags}', ht).replace(/\n{3,}/g, '\n\n').trim();
   const inComment = c.link_in_comment !== false;
   // Link goes in the first comment (Facebook reduces reach of posts with links in the caption)
-  const fbCaption = fill(c.caption || '{title}\n{cta}', inComment ? (c.fb_cta || '👇 Order link in the comments') : `🛒 Order now: ${link}`);
-  const igCaption = fill(c.caption || '{title}\n{cta}', c.ig_cta || '🔗 Order via the link in our bio');
+  const fbCaption = fill(c.caption || '{title}\n{cta}', inComment ? (c.fb_cta || '👇 Order link in the comments') : `🛒 Order now: ${link}`, tags.facebook.join(' '));
+  const igCaption = fill(c.caption || '{title}\n{cta}', c.ig_cta || '🔗 Order via the link in our bio', tags.instagram.join(' '));
   const comment = fill(c.comment || '🛒 Order now: {link}');
 
   const out: any = {}, errors: string[] = [];
