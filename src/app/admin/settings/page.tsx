@@ -14,7 +14,7 @@ const SECTIONS: [string, string, string][] = [
   ['options', 'Sizes & colours', 'Available choices when creating products and in shop filters. One per line.'],
   ['tracking', 'Tracking & pixels', 'gtm = GTM-XXXX · ga4 = G-XXXX · pixel = Meta Pixel ID (numbers) · tiktok = TikTok Pixel ID. Meta Conversions API token is set on the server (ask your developer once).'],
   ['seo', 'Site SEO', 'Default title and description for Google and link previews.'],
-  ['social', 'Social links & contact', 'Full URLs, e.g. https://instagram.com/yourpage'],
+  ['social', 'Social links & contact', 'Full URLs, e.g. https://instagram.com/yourpage. whatsapp = number with country code (shows the floating chat button).'],
   ['policies', 'Policy pages', 'Each new line becomes a paragraph.'],
   ['social_post', 'Social auto-post', 'Posts each product to Facebook & Instagram when you publish it. Placeholders: {title} {price} {compare} {description} {link} {hashtags} {cta}. {cta} becomes the Facebook/Instagram call-to-action line below.'],
   ['business', 'Business info (shown on invoices)', 'Name, contact and the thank-you note printed on every invoice.'],

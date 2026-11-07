@@ -9,6 +9,7 @@ import './globals.css';
 import { CartProvider } from '@/components/Cart';
 import { Header, Footer } from '@/components/Chrome';
 import Tracking from '@/components/Tracking';
+import WhatsApp from '@/components/WhatsApp';
 import { getSettings } from '@/lib/data';
 
 
@@ -23,6 +24,7 @@ export async function generateMetadata(): Promise<Metadata> {
   description: seo.description,
   openGraph: { siteName: 'VEST', type: 'website', locale: 'en_BD', images: [{ url: '/og.jpg', width: 1200, height: 630, alt: 'VEST — Premium DTF printed graphic t-shirts' }] },
   manifest: '/manifest.webmanifest',
+  icons: { icon: [{ url: '/favicon.ico', sizes: 'any' }, { url: '/icon.png', type: 'image/png', sizes: '512x512' }], apple: '/apple-icon.png' },
   appleWebApp: { title: 'VEST', statusBarStyle: 'black-translucent' },
   twitter: { card: 'summary_large_image' },
   };
@@ -41,6 +43,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <Header announce={s.announce} />
           <main>{children}</main>
           <Footer social={s.social} line={s.statement?.footer} credit={s.credit} />
+          <WhatsApp number={s.social?.whatsapp} />
         </CartProvider>
       </body>
     </html>

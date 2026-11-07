@@ -80,7 +80,7 @@ export function Footer({ social, line, credit }: { social?: Record<string, strin
             <span className="opacity-50">Help</span>
             <Link href="/track">Track Order</Link><Link href="/policy/shipping">Shipping</Link><Link href="/policy/returns">Returns & Exchange</Link>
             <Link href="/policy/privacy">Privacy</Link><Link href="/policy/terms">Terms</Link>
-            {social?.instagram && <a href={social.instagram}>Instagram</a>}{social?.facebook && <a href={social.facebook}>Facebook</a>}{social?.tiktok && <a href={social.tiktok}>TikTok</a>}
+            {social?.instagram && <a href={social.instagram} target="_blank" rel="noopener">Instagram</a>}{social?.whatsapp && <a href={`https://wa.me/${social.whatsapp.replace(/\D/g, '')}`} target="_blank" rel="noopener">WhatsApp</a>}{social?.facebook && <a href={social.facebook} target="_blank" rel="noopener">Facebook</a>}{social?.tiktok && <a href={social.tiktok}>TikTok</a>}
           </div>
         </div>
       </div>
