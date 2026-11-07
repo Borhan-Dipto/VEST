@@ -29,8 +29,8 @@ export default function ProductCard({ p, big }: { p: Product; big?: boolean }) {
         {wish.includes(p.slug) ? '♥' : '♡'}
       </button>
       {!soldOut && (
-        <div className={`absolute left-3 right-3 bottom-[76px] transition-all ${quick ? 'opacity-100' : 'opacity-0 md:group-hover:opacity-100 pointer-events-none md:group-hover:pointer-events-auto'} ${quick ? 'pointer-events-auto' : ''}`}>
-          <div className="bg-paper p-2 flex gap-1 flex-wrap justify-center">
+        <div className={`absolute left-3 right-3 bottom-[92px] transition-all ${quick ? 'opacity-100' : 'opacity-0 md:group-hover:opacity-100 pointer-events-none md:group-hover:pointer-events-auto'} ${quick ? 'pointer-events-auto' : ''}`}>
+          <div className="bg-paper/95 backdrop-blur p-2.5 flex gap-1.5 flex-wrap justify-center">
             {p.variants.filter((v) => v.color === color).map((v) => (
               <button key={v.id} disabled={v.stock < 1}
                 onClick={() => { add({ variant_id: v.id, product_id: p.id, slug: p.slug, title: p.title, size: v.size, color: v.color, price: p.price, image: img, qty: 1, max: v.stock }); setQuick(false); }}
@@ -39,7 +39,7 @@ export default function ProductCard({ p, big }: { p: Product; big?: boolean }) {
           </div>
         </div>
       )}
-      <div className="pt-3 flex justify-between gap-3">
+      <div className="pt-4 flex justify-between gap-4">
         <div>
           <Link href={`/product/${p.slug}`} className="font-medium leading-tight">{p.title}</Link>
           <div className="flex gap-1.5 mt-2">{colors.map((c) => <span key={c} title={c} className="w-3 h-3 rounded-full border border-ink/30" style={{ background: SWATCH[c] || c }} />)}</div>

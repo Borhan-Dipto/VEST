@@ -91,7 +91,7 @@ export default function Checkout() {
           <div key={l.variant_id} className="flex gap-3"><img src={l.image} alt="" className="w-14 h-16 object-cover bg-warm" />
             <div className="flex-1 text-sm"><div className="font-medium">{l.title}</div><div className="opacity-60">{l.size} / {l.color} × {l.qty}</div></div><span className="text-sm">৳{l.price * l.qty}</span></div>
         ))}</div>
-        <div className="flex gap-2 mt-5"><input value={code} onChange={(e) => setCode(e.target.value.toUpperCase())} placeholder="Coupon code" className="input !h-11" /><button type="button" onClick={applyCoupon} className="btn btn-ghost !h-11">Apply</button></div>
+        <div className="flex gap-3 mt-6"><input value={code} onChange={(e) => setCode(e.target.value.toUpperCase())} placeholder="Coupon code" className="input !h-11" /><button type="button" onClick={applyCoupon} className="btn btn-ghost !h-11">Apply</button></div>
         {cpMsg && <p className="meta mt-2">{cpMsg}</p>}
         <dl className="mt-5 space-y-2 text-sm">
           <div className="flex justify-between"><dt>Subtotal</dt><dd>৳{subtotal}</dd></div>

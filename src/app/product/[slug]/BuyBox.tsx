@@ -53,13 +53,13 @@ export default function BuyBox({ p, chart = [], note }: { p: Product; chart?: (s
 
         <div className="mt-8">
           <div className="meta mb-2">Colour — {color}</div>
-          <div className="flex gap-2">{colors.map((c) => (
+          <div className="flex flex-wrap gap-3">{colors.map((c) => (
             <button key={c} onClick={() => { setColor(c); setSize(''); }} className={`meta px-4 h-10 border ${c === color ? 'bg-ink text-paper border-ink' : 'border-ink/20'}`}>{c}</button>
           ))}</div>
         </div>
         <div className="mt-6">
           <div className="flex justify-between meta mb-2"><span>Size {size && `— ${size}`}</span><button onClick={() => setGuide(true)} className="underline">Size guide</button></div>
-          <div className="grid grid-cols-5 gap-2">{p.variants.filter((x) => x.color === color).map((x) => (
+          <div className="grid grid-cols-5 gap-2.5">{p.variants.filter((x) => x.color === color).map((x) => (
             <button key={x.id} disabled={x.stock < 1} onClick={() => { setSize(x.size); setErr(''); setQty(1); }}
               className={`h-12 border meta disabled:opacity-30 disabled:line-through ${x.size === size ? 'bg-ink text-paper border-ink' : 'border-ink/20 hover:border-ink'}`}>{x.size}</button>
           ))}</div>
@@ -67,7 +67,7 @@ export default function BuyBox({ p, chart = [], note }: { p: Product; chart?: (s
           {err && <p className="meta text-signal mt-2">{err}</p>}
         </div>
 
-        <div className="mt-6 flex gap-2">
+        <div className="mt-8 flex gap-3">
           <div className="flex border border-ink/20 shrink-0">
             <button className="w-11 h-12" onClick={() => setQty(Math.max(1, qty - 1))}>−</button>
             <span className="w-8 grid place-items-center">{qty}</span>
@@ -76,15 +76,15 @@ export default function BuyBox({ p, chart = [], note }: { p: Product; chart?: (s
           <button onClick={() => go(false)} className="btn flex-1">Add to bag</button>
           <button onClick={() => toggleWish(p.slug, p.title)} className="btn btn-ghost !px-4" aria-label="Save">{wish.includes(p.slug) ? '♥' : '♡'}</button>
         </div>
-        <button onClick={() => go(true)} className="btn !bg-lime !text-ink w-full mt-2">Buy now — Cash on delivery</button>
+        <button onClick={() => go(true)} className="btn !bg-lime !text-ink w-full mt-3">Buy now — Cash on delivery</button>
 
-        <ul className="mt-6 space-y-2 text-sm opacity-80">
+        <ul className="mt-8 space-y-3 text-sm opacity-80 border-t border-ink/10 pt-6">
           <li>✦ {p.fit} fit · {p.gsm} GSM · {p.fabric}</li><li>✦ DTF print — vivid, flexible, wash-safe</li><li>✦ Delivery 1–5 days · Exchange within 3 days</li>
         </ul>
       </div>
 
       {/* sticky mobile CTA */}
-      <div className="md:hidden fixed bottom-0 inset-x-0 z-30 bg-paper border-t border-ink/10 p-3 flex gap-2">
+      <div className="md:hidden fixed bottom-0 inset-x-0 z-30 bg-paper border-t border-ink/10 px-4 py-3 flex items-center gap-4">
         <div className="flex-1"><div className="font-medium">{p.title}</div><div className="meta">৳{p.price} {size && `· ${size}`}</div></div>
         <button onClick={() => go(false)} className="btn">Add to bag</button>
       </div>

@@ -22,20 +22,27 @@ export default async function Home() {
             <span className="absolute bottom-3 left-3 meta bg-lime px-2 py-1">Drop 01 / Live now</span>
           </div>
         </div>
-        <div className="mt-6 flex flex-col sm:flex-row gap-6 sm:items-center justify-between border-t border-ink pt-6">
+        <div className="mt-10 flex flex-col sm:flex-row gap-8 sm:items-center justify-between border-t border-ink pt-8">
           <p className="font-serif italic text-2xl md:text-3xl max-w-xl">{h.text}</p>
           <Link href={h.link || '/shop'} className="btn shrink-0">{h.cta} →</Link>
         </div>
       </section>
 
       {/* MARQUEE */}
-      <div className="mt-16 bg-lime overflow-hidden py-4 border-y border-ink">
-        <div className="marquee">{[...mq, ...mq, ...mq, ...mq].map((t, i) => <span key={i} className="display text-4xl md:text-6xl px-6 whitespace-nowrap">{t} ✦</span>)}</div>
+      <div className="mt-20 bg-ink text-paper border-y border-paper/10 py-6 md:py-8 overflow-hidden marquee-mask">
+        <div className="marquee items-center">
+          {[...mq, ...mq, ...mq, ...mq].map((t, i) => (
+            <span key={i} className="flex items-center whitespace-nowrap">
+              <span className={`display text-3xl md:text-5xl tracking-wide px-8 md:px-12 ${i % 2 ? 'text-outline' : ''}`}>{t}</span>
+              <span className="font-serif italic text-2xl md:text-4xl text-lime">✦</span>
+            </span>
+          ))}
+        </div>
       </div>
 
       {/* NEW ARRIVALS */}
       <section className="wrap mt-20">
-        <div className="flex items-end justify-between mb-8">
+        <div className="flex items-end justify-between gap-6 mb-10">
           <h2 className="display text-6xl md:text-8xl">New<br />Arrivals</h2>
           <Link href="/shop?sort=new" className="meta underline underline-offset-4">View all ({fresh.length}+)</Link>
         </div>
@@ -71,14 +78,14 @@ export default async function Home() {
             <span className="meta text-lime">Editorial — Issue 01</span>
             <h2 className="display text-6xl md:text-8xl mt-4">{ed.title}</h2>
             <p className="font-serif italic text-2xl md:text-3xl mt-6 opacity-80">{ed.text}</p>
-            <Link href={ed.link || '/shop'} className="btn !bg-lime !text-ink mt-8">{ed.cta} →</Link>
+            <Link href={ed.link || '/shop'} className="btn !bg-lime !text-ink mt-10">{ed.cta} →</Link>
           </div>
         </div>
       </section>
 
       {/* BEST SELLERS */}
       <section className="wrap mt-28">
-        <div className="flex items-end justify-between mb-8">
+        <div className="flex items-end justify-between gap-6 mb-10">
           <h2 className="display text-6xl md:text-8xl">Best<span className="font-serif italic normal-case text-5xl md:text-7xl"> sellers</span></h2>
           <Link href="/shop?sort=popular" className="meta underline underline-offset-4">Shop all</Link>
         </div>

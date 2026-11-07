@@ -28,8 +28,8 @@ export function Header({ announce }: { announce?: { text?: string; show?: boolea
         <div className="wrap h-16 flex items-center justify-between gap-4">
           <button className="md:hidden meta" onClick={() => setMenu(!menu)} aria-label="Menu">{menu ? 'Close' : 'Menu'}</button>
           <Link href="/" className="display text-4xl tracking-tight">VEST<sup className="text-xs align-top font-mono">™</sup></Link>
-          <nav className="hidden md:flex gap-8 meta">{NAV.map(([t, h]) => <Link key={t} href={h} className="hover:underline underline-offset-4">{t}</Link>)}</nav>
-          <div className="flex items-center gap-4 meta">
+          <nav className="hidden md:flex gap-10 meta">{NAV.map(([t, h]) => <Link key={t} href={h} className="hover:underline underline-offset-4">{t}</Link>)}</nav>
+          <div className="flex items-center gap-4 sm:gap-6 meta">
             <button onClick={() => setSearch(!search)} aria-label="Search">Search</button>
             <Link href="/wishlist" className="hidden sm:inline">Saved({wish.length})</Link>
             <Link href="/account" className="hidden sm:inline">Account</Link>
@@ -66,7 +66,7 @@ export function Footer({ social, line }: { social?: Record<string, string>; line
       <div className="wrap py-16 grid gap-12 md:grid-cols-2">
         <div>
           <p className="display text-6xl md:text-8xl max-w-xl">{line || 'Never blend in.'}</p>
-          <form onSubmit={sub} className="mt-8 flex max-w-md">
+          <form onSubmit={sub} className="mt-8 flex gap-3 max-w-md">
             <input name="email" type="email" required placeholder="Email for drop alerts" className="input !bg-transparent !border-paper/30 text-paper" />
             <button className="btn !bg-lime !text-ink shrink-0">{done ? 'Joined ✓' : 'Join'}</button>
           </form>
