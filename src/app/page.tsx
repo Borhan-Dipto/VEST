@@ -93,7 +93,7 @@ export default async function Home() {
       </section>
 
       {/* STATEMENT */}
-      <section className="wrap mt-28 text-center">
+      <section className="wrap mt-40 md:mt-56 mb-16 md:mb-24 text-center">
         <p className="display text-[16vw] md:text-[11rem]">{st.line1}<br /><span className="text-signal">{st.line2}</span></p>
         <p className="meta mt-6 opacity-60">{st.sub}</p>
       </section>

@@ -22,7 +22,7 @@ body { font-family: var(--font-sans); overflow-x: hidden; }
 .wrap { max-width: 1440px; margin: 0 auto; padding: 0 16px; }
 @media (min-width: 768px) { .wrap { padding: 0 32px; } }
 
-.btn { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; height: 50px; padding: 0 28px; white-space: nowrap;
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; height: 48px; padding: 0 28px; white-space: nowrap;
   background: var(--color-ink); color: var(--color-paper); font-family: var(--font-mono); font-size: 12px; letter-spacing: .1em;
   text-transform: uppercase; transition: background .2s, color .2s, transform .1s; }
 .btn:hover { background: var(--color-lime); color: var(--color-ink); }
