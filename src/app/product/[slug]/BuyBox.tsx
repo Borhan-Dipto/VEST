@@ -69,12 +69,12 @@ export default function BuyBox({ p, chart = [], note }: { p: Product; chart?: (s
 
         <div className="mt-8 flex gap-3">
           <div className="flex border border-ink/20 shrink-0">
-            <button className="w-11 h-12" onClick={() => setQty(Math.max(1, qty - 1))}>−</button>
+            <button className="w-10 h-12" aria-label="Decrease quantity" onClick={() => setQty(Math.max(1, qty - 1))}>−</button>
             <span className="w-8 grid place-items-center">{qty}</span>
-            <button className="w-11 h-12" onClick={() => setQty(Math.min(v?.stock || 10, qty + 1))}>+</button>
+            <button className="w-10 h-12" aria-label="Increase quantity" onClick={() => setQty(Math.min(v?.stock || 10, qty + 1))}>+</button>
           </div>
-          <button onClick={() => go(false)} className="btn flex-1">Add to bag</button>
-          <button onClick={() => toggleWish(p.slug, p.title)} className="btn btn-ghost !px-4" aria-label="Save">{wish.includes(p.slug) ? '♥' : '♡'}</button>
+          <button onClick={() => go(false)} className="btn flex-1 min-w-0 !px-4">Add to bag</button>
+          <button onClick={() => toggleWish(p.slug, p.title)} className="btn btn-ghost !px-0 w-12 shrink-0" aria-label="Save">{wish.includes(p.slug) ? '♥' : '♡'}</button>
         </div>
         <button onClick={() => go(true)} className="btn !bg-lime !text-ink w-full mt-3">Buy now — Cash on delivery</button>
 

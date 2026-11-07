@@ -42,7 +42,7 @@ export default async function Home() {
 
       {/* NEW ARRIVALS */}
       <section className="wrap mt-20">
-        <div className="flex items-end justify-between gap-6 mb-10">
+        <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-3 mb-10">
           <h2 className="display text-6xl md:text-8xl">New<br />Arrivals</h2>
           <Link href="/shop?sort=new" className="meta underline underline-offset-4">View all ({fresh.length}+)</Link>
         </div>
@@ -53,7 +53,7 @@ export default async function Home() {
 
       {/* COLLECTIONS — asymmetric editorial grid */}
       <section className="wrap mt-28">
-        <div className="flex justify-between items-baseline mb-8"><h2 className="display text-6xl md:text-8xl">Collections</h2><span className="meta opacity-60">{String(cols.length).padStart(2, '0')} stories</span></div>
+        <div className="flex flex-wrap gap-x-6 gap-y-2 justify-between items-baseline mb-8"><h2 className="display text-6xl md:text-8xl">Collections</h2><span className="meta opacity-60">{String(cols.length).padStart(2, '0')} stories</span></div>
         <div className="grid grid-cols-2 md:grid-cols-12 gap-3 md:gap-5">
           {cols.map((c, i) => (
             <Link key={c.id} href={`/collections/${c.slug}`}
@@ -85,7 +85,7 @@ export default async function Home() {
 
       {/* BEST SELLERS */}
       <section className="wrap mt-28">
-        <div className="flex items-end justify-between gap-6 mb-10">
+        <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-3 mb-10">
           <h2 className="display text-6xl md:text-8xl">Best<span className="font-serif italic normal-case text-5xl md:text-7xl"> sellers</span></h2>
           <Link href="/shop?sort=popular" className="meta underline underline-offset-4">Shop all</Link>
         </div>
