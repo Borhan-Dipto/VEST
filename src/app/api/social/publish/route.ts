@@ -16,7 +16,7 @@ async function getPageToken() {
   return pageToken;
 }
 async function call(path: string, params: Record<string, string>, usePage = false) {
-  const token = usePage ? await getPageToken() : process.env.META_PAGE_TOKEN!;
+  const token: string = usePage ? (await getPageToken()) as string : process.env.META_PAGE_TOKEN!;
   const r = await fetch(`${G}/${path}`, { method: 'POST', headers: { 'content-type': 'application/x-www-form-urlencoded' },
     body: new URLSearchParams({ ...params, access_token: token }) });
   const j = await r.json();
