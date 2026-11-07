@@ -39,7 +39,8 @@ export default function Invoice({ params }: { params: Promise<{ no: string }> })
 
   const paid = o.payment_status === 'paid';
   const due = paid ? 0 : o.total;
-  const addr = [o.address, o.area, o.district, o.division].filter(Boolean).join(', ');
+  const addr = [o.address, o.area, o.district, o.division].filter(Boolean).filter((x: string, i: number, a: string[]) => a.findIndex((y) => y.trim().toLowerCase() === x.trim().toLowerCase()) === i && !(i > 0 && String(o.address).toLowerCase().includes(x.trim().toLowerCase()))).join(', ');
+  useEffect(() => { if (o) document.title = `Invoice ${orderCode(o.order_no)} — VEST`; }, [o]);
 
   return (
     <div style={{ background: '#EDEAE3', minHeight: '100vh', padding: '24px 12px' }}>
