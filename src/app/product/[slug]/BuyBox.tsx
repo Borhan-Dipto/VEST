@@ -5,9 +5,8 @@ import type { Product } from '@/lib/data';
 import { useCart } from '@/components/Cart';
 import { track } from '@/lib/track';
 
-const CHART = [['S', 38, 27], ['M', 40, 28], ['L', 42, 29], ['XL', 44, 30], ['XXL', 46, 31]];
 
-export default function BuyBox({ p }: { p: Product }) {
+export default function BuyBox({ p, chart = [], note }: { p: Product; chart?: (string | number)[][]; note?: string }) {
   const { add, wish, toggleWish } = useCart();
   const router = useRouter();
   const colors = [...new Set(p.variants.map((v) => v.color))];
@@ -95,8 +94,8 @@ export default function BuyBox({ p }: { p: Product }) {
           <div className="bg-paper p-6 w-full max-w-md" onClick={(e) => e.stopPropagation()}>
             <div className="flex justify-between mb-4"><span className="display text-4xl">Size guide</span><button onClick={() => setGuide(false)} className="meta">✕</button></div>
             <table className="w-full text-left"><thead className="meta"><tr><th className="py-2">Size</th><th>Chest (in)</th><th>Length (in)</th></tr></thead>
-              <tbody>{CHART.map(([s, c, l]) => <tr key={s} className="border-t border-warm"><td className="py-2 font-medium">{s}</td><td>{c}</td><td>{l}</td></tr>)}</tbody></table>
-            <p className="text-sm opacity-60 mt-4">Oversized fit — size down for a regular fit.</p>
+              <tbody>{chart.map(([s, c, l]) => <tr key={s} className="border-t border-warm"><td className="py-2 font-medium">{s}</td><td>{c}</td><td>{l}</td></tr>)}</tbody></table>
+            {note && <p className="text-sm opacity-60 mt-4">{note}</p>}
           </div>
         </div>
       )}

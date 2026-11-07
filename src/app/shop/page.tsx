@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
-import { getProducts, getCollections, ShopQuery } from '@/lib/data';
+import { getProducts, getCollections, getSettings, ShopQuery } from '@/lib/data';
 import ProductCard from '@/components/ProductCard';
 
 type SP = Promise<ShopQuery>;
@@ -11,7 +11,8 @@ export async function generateMetadata({ searchParams }: { searchParams: SP }): 
 
 export default async function Shop({ searchParams }: { searchParams: SP }) {
   const s = await searchParams;
-  const [list, cols] = await Promise.all([getProducts(s), getCollections()]);
+  const [list, cols, set] = await Promise.all([getProducts(s), getCollections(), getSettings()]);
+  const opt = set.options || { sizes: [], colors: [] };
   const chips = Object.entries(s).filter(([k, v]) => v && k !== 'sort');
   const url = (patch: Partial<ShopQuery>) => '/shop?' + new URLSearchParams(Object.entries({ ...s, ...patch }).filter(([, v]) => v) as any).toString();
   const title = s.q ? `“${s.q}”` : s.collection ? cols.find((c) => c.slug === s.collection)?.title || 'Shop' : s.sort === 'popular' ? 'Best Sellers' : 'All Tees';
@@ -24,8 +25,8 @@ export default async function Shop({ searchParams }: { searchParams: SP }) {
       <form className="mt-8 grid grid-cols-2 md:grid-cols-6 gap-2 sticky top-16 z-30 bg-paper py-3 border-b border-ink/10">
         {s.q && <input type="hidden" name="q" value={s.q} />}
         <select name="collection" defaultValue={s.collection || ''} className="input !h-11 meta"><option value="">Collection</option>{cols.map((c) => <option key={c.id} value={c.slug}>{c.title}</option>)}</select>
-        <select name="size" defaultValue={s.size || ''} className="input !h-11 meta"><option value="">Size</option>{['S', 'M', 'L', 'XL', 'XXL'].map((z) => <option key={z}>{z}</option>)}</select>
-        <select name="color" defaultValue={s.color || ''} className="input !h-11 meta"><option value="">Color</option>{['Black', 'White'].map((z) => <option key={z}>{z}</option>)}</select>
+        <select name="size" defaultValue={s.size || ''} className="input !h-11 meta"><option value="">Size</option>{opt.sizes.map((z: string) => <option key={z}>{z}</option>)}</select>
+        <select name="color" defaultValue={s.color || ''} className="input !h-11 meta"><option value="">Color</option>{opt.colors.map((z: string) => <option key={z}>{z}</option>)}</select>
         <select name="max" defaultValue={s.max || ''} className="input !h-11 meta"><option value="">Price</option><option value="800">Under ৳800</option><option value="1000">Under ৳1000</option><option value="1500">Under ৳1500</option></select>
         <select name="sort" defaultValue={s.sort || 'new'} className="input !h-11 meta"><option value="new">Newest</option><option value="popular">Popular</option><option value="price-asc">Price ↑</option><option value="price-desc">Price ↓</option></select>
         <button className="btn !h-11">Apply</button>

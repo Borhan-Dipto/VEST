@@ -15,13 +15,16 @@ import { getSettings } from '@/lib/data';
 export const SITE = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
 export const revalidate = 60;
 
-export const metadata: Metadata = {
+export async function generateMetadata(): Promise<Metadata> {
+  const seo = (await getSettings()).seo || {};
+  return {
   metadataBase: new URL(SITE),
-  title: { default: 'VEST — Graphic T-Shirts in Bangladesh', template: '%s — VEST' },
-  description: 'Oversized graphic & DTF printed t-shirts for Gen Z. Trend-driven streetwear with cash on delivery all over Bangladesh.',
+  title: { default: seo.title || 'VEST', template: '%s — VEST' },
+  description: seo.description,
   openGraph: { siteName: 'VEST', type: 'website', locale: 'en_BD' },
   twitter: { card: 'summary_large_image' },
-};
+  };
+}
 export const viewport: Viewport = { themeColor: '#111111', width: 'device-width', initialScale: 1 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
@@ -33,9 +36,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <Tracking t={s.tracking} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(org) }} />
         <CartProvider>
-          <Header />
+          <Header announce={s.announce} />
           <main>{children}</main>
-          <Footer social={s.social} />
+          <Footer social={s.social} line={s.statement?.footer} />
         </CartProvider>
       </body>
     </html>

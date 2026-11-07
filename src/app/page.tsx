@@ -6,7 +6,7 @@ export const revalidate = 60;
 
 export default async function Home() {
   const [s, fresh, best, cols] = await Promise.all([getSettings(), getProducts({ limit: 8 }), getProducts({ sort: 'popular', limit: 4 }), getCollections()]);
-  const h = s.hero || {}, ed = s.editorial || {}, mq: string[] = s.marquee?.items || [];
+  const h = s.hero || {}, ed = s.editorial || {}, st = s.statement || {}, mq: string[] = s.marquee?.items || [];
 
   return (
     <>
@@ -87,8 +87,8 @@ export default async function Home() {
 
       {/* STATEMENT */}
       <section className="wrap mt-28 text-center">
-        <p className="display text-[16vw] md:text-[11rem]">Wear what<br />you <span className="text-signal">feel.</span></p>
-        <p className="meta mt-6 opacity-60">VEST — Independent Graphic Apparel · DTF printed · 180 GSM cotton</p>
+        <p className="display text-[16vw] md:text-[11rem]">{st.line1}<br /><span className="text-signal">{st.line2}</span></p>
+        <p className="meta mt-6 opacity-60">{st.sub}</p>
       </section>
     </>
   );

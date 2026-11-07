@@ -7,7 +7,7 @@ import { captureUtm, track } from '@/lib/track';
 
 const NAV = [['Shop', '/shop'], ['New Arrivals', '/shop?sort=new'], ['Collections', '/collections'], ['Best Sellers', '/shop?sort=popular']];
 
-export function Header() {
+export function Header({ announce }: { announce?: { text?: string; show?: boolean } }) {
   const { count, setOpen, wish } = useCart();
   const [menu, setMenu] = useState(false);
   const [search, setSearch] = useState(false);
@@ -16,14 +16,14 @@ export function Header() {
   const router = useRouter();
   useEffect(() => { setMenu(false); setSearch(false); }, [path]);
   useEffect(() => { captureUtm(); }, []);
-  useEffect(() => { track('page_view'); }, [path]);
+  useEffect(() => { if (!path.startsWith('/admin')) track('page_view'); }, [path]);
 
   const go = (e: React.FormEvent) => { e.preventDefault(); if (!q.trim()) return; track('search', { search: q }); router.push(`/shop?q=${encodeURIComponent(q)}`); };
   if (path.startsWith('/admin')) return null;
 
   return (
     <>
-      <div className="bg-ink text-paper meta text-center py-2">Cash on delivery all over Bangladesh · Free exchange within 3 days</div>
+      {announce?.show !== false && announce?.text && <div className="bg-ink text-paper meta text-center py-2 px-4">{announce.text}</div>}
       <header className="sticky top-0 z-40 bg-paper/90 backdrop-blur border-b border-ink/10">
         <div className="wrap h-16 flex items-center justify-between gap-4">
           <button className="md:hidden meta" onClick={() => setMenu(!menu)} aria-label="Menu">{menu ? 'Close' : 'Menu'}</button>
@@ -51,7 +51,7 @@ export function Header() {
   );
 }
 
-export function Footer({ social }: { social?: Record<string, string> }) {
+export function Footer({ social, line }: { social?: Record<string, string>; line?: string }) {
   const path = usePathname();
   const [done, setDone] = useState(false);
   if (path.startsWith('/admin')) return null;
@@ -65,7 +65,7 @@ export function Footer({ social }: { social?: Record<string, string> }) {
     <footer className="bg-ink text-paper mt-24">
       <div className="wrap py-16 grid gap-12 md:grid-cols-2">
         <div>
-          <p className="display text-6xl md:text-8xl">Never<br />blend in.</p>
+          <p className="display text-6xl md:text-8xl max-w-xl">{line || 'Never blend in.'}</p>
           <form onSubmit={sub} className="mt-8 flex max-w-md">
             <input name="email" type="email" required placeholder="Email for drop alerts" className="input !bg-transparent !border-paper/30 text-paper" />
             <button className="btn !bg-lime !text-ink shrink-0">{done ? 'Joined ✓' : 'Join'}</button>
