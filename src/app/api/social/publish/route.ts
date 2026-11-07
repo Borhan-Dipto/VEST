@@ -7,9 +7,18 @@ export const maxDuration = 60;
 const G = 'https://graph.facebook.com/v21.0';
 const SITE = process.env.NEXT_PUBLIC_SITE_URL || '';
 
-async function call(path: string, params: Record<string, string>) {
+// The stored System User token is exchanged for the Page's own token (needed to post on the Page).
+let pageToken: string | null = null;
+async function getPageToken() {
+  if (pageToken) return pageToken;
+  const r = await fetch(`${G}/${process.env.META_PAGE_ID}?fields=access_token&access_token=${process.env.META_PAGE_TOKEN}`).then((x) => x.json());
+  pageToken = r.access_token || process.env.META_PAGE_TOKEN!;
+  return pageToken;
+}
+async function call(path: string, params: Record<string, string>, usePage = false) {
+  const token = usePage ? await getPageToken() : process.env.META_PAGE_TOKEN!;
   const r = await fetch(`${G}/${path}`, { method: 'POST', headers: { 'content-type': 'application/x-www-form-urlencoded' },
-    body: new URLSearchParams({ ...params, access_token: process.env.META_PAGE_TOKEN! }) });
+    body: new URLSearchParams({ ...params, access_token: token }) });
   const j = await r.json();
   if (!r.ok || j.error) throw new Error(j.error?.error_user_msg || j.error?.message || `Meta error ${r.status}`);
   return j;
@@ -58,13 +67,13 @@ export async function POST(req: Request) {
   const out: any = {}, errors: string[] = [];
   if (c.facebook !== false) {
     try {
-      if (imgs.length === 1) out.facebook = (await call(`${PAGE}/photos`, { url: imgs[0], message: caption })).post_id;
+      if (imgs.length === 1) out.facebook = (await call(`${PAGE}/photos`, { url: imgs[0], message: caption }, true)).post_id;
       else {
         const ids = [];
-        for (const u of imgs) ids.push((await call(`${PAGE}/photos`, { url: u, published: 'false' })).id);
+        for (const u of imgs) ids.push((await call(`${PAGE}/photos`, { url: u, published: 'false' }, true)).id);
         const params: Record<string, string> = { message: caption };
         ids.forEach((id, i) => (params[`attached_media[${i}]`] = JSON.stringify({ media_fbid: id })));
-        out.facebook = (await call(`${PAGE}/feed`, params)).id;
+        out.facebook = (await call(`${PAGE}/feed`, params, true)).id;
       }
     } catch (e: any) { errors.push('Facebook: ' + e.message); }
   }
