@@ -28,7 +28,7 @@ export function Header({ announce }: { announce?: { text?: string; show?: boolea
         <div className="wrap h-16 flex items-center justify-between gap-2 sm:gap-4">
           <button className="lg:hidden meta h-9 px-2.5 sm:px-3 border border-ink/20 hover:border-ink" onClick={() => setMenu(!menu)} aria-label="Menu">{menu ? 'Close' : 'Menu'}</button>
           <Link href="/" className="brand-mark" aria-label="VEST home"><img src="/v-mark.png" alt="" width="34" height="26" /><span>VEST</span></Link>
-          <nav className="hidden lg:flex gap-8 xl:gap-10 meta">{NAV.map(([t, h]) => <Link key={t} href={h} className="hover:underline underline-offset-4">{t}</Link>)}</nav>
+          <nav className="hidden lg:flex gap-2 meta" aria-label="Main">{NAV.map(([t, h]) => { const on = !h.includes('?') && (path === h || path.startsWith(h + '/')); return <Link key={t} href={h} className={`h-9 px-3.5 inline-flex items-center border transition-colors ${on ? 'border-ink bg-ink text-paper' : 'border-ink/15 hover:border-ink hover:bg-card'}`}>{t}</Link>; })}</nav>
           <div className="flex items-center gap-2 sm:gap-3 meta">
             <button onClick={() => setSearch(!search)} aria-label="Search" className="h-9 w-9 sm:w-auto sm:px-3 grid sm:inline-flex place-items-center items-center border border-ink/20 hover:border-ink"><svg className="sm:hidden" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span className="hidden sm:inline">Search</span></button>
             <Link href="/wishlist" className="hidden sm:inline-flex items-center h-9 px-3 border border-ink/20 hover:border-ink">Saved({wish.length})</Link>
@@ -41,8 +41,8 @@ export function Header({ announce }: { announce?: { text?: string; show?: boolea
           </form>
         )}
         {menu && (
-          <nav className="lg:hidden border-t border-ink/10 wrap py-6 flex flex-col gap-3">
-            {[...NAV, ['Saved', '/wishlist'], ['Track Order', '/track']].map(([t, h]) => <Link key={t} href={h} className="display text-5xl">{t}</Link>)}
+          <nav className="lg:hidden border-t border-ink/10 wrap pt-2 pb-6 flex flex-col" aria-label="Mobile">
+            {[...NAV, ['Saved', '/wishlist'], ['Track Order', '/track']].map(([t, h]) => <Link key={t} href={h} className="flex items-center justify-between py-3 border-b border-ink/10 display text-4xl hover:text-signal">{t}<span aria-hidden="true" className="font-sans text-2xl opacity-40">→</span></Link>)}
           </nav>
         )}
       </header>

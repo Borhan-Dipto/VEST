@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { db, upload, slugify, refreshSite, postToSocials } from '@/lib/admin';
 import { buildHashtags } from '@/lib/hashtags';
+import { describe } from '@/lib/describe';
 
 const BLANK = { title: '', slug: '', description: '', price: 850, compare_price: null as number | null, collection_id: '', badge: '', fabric: '100% Cotton', gsm: 180, fit: 'Oversized',
   status: 'draft', featured: false, tags: [] as string[], seo_title: '', seo_desc: '', social_skip: false, extra_hashtags: '' };
@@ -44,6 +45,7 @@ export default function ProductEdit({ params }: { params: Promise<{ id: string }
     });
   }, [id]);
 
+  const autoDesc = () => describe({ title: p.title, collection: cols.find((c) => c.id === p.collection_id)?.title, fit: p.fit, fabric: p.fabric, gsm: p.gsm, tags: p.tags, colors });
   const set = (k: string, v: any) => setP((x: any) => ({ ...x, [k]: v, ...(k === 'title' && (isNew || !x.slug) ? { slug: slugify(v) } : {}) }));
   const toggle = (arr: string[], v: string, fn: (a: string[]) => void) => fn(arr.includes(v) ? arr.filter((x) => x !== v) : [...arr, v]);
   const allSizes = [...new Set([...opt.sizes, ...sizes])], allColors = [...new Set([...opt.colors, ...colors])];
@@ -61,6 +63,7 @@ export default function ProductEdit({ params }: { params: Promise<{ id: string }
     if (!p.title || !p.slug || !p.price) return setMsg('Title, URL and price are required.');
     if (!sizes.length || !colors.length) return setMsg('Pick at least one size and one colour.');
     setBusy(true); setMsg('');
+    if (!p.description?.trim()) p.description = autoDesc();
     const row = { ...p, slug: asCopy ? `${p.slug}-copy-${Date.now() % 10000}` : p.slug, title: asCopy ? `${p.title} (copy)` : p.title, status: asCopy ? 'draft' : p.status,
       collection_id: p.collection_id || null, badge: p.badge || null, compare_price: p.compare_price || null, seo_title: p.seo_title || null, seo_desc: p.seo_desc || null };
     delete row.id; delete row.created_at; delete row.sold_count; delete row.social_posted_at; delete row.social_ref;
@@ -110,7 +113,9 @@ export default function ProductEdit({ params }: { params: Promise<{ id: string }
         <div className="lg:col-span-2 space-y-6">
           <section className="bg-card p-4 space-y-3">
             <L t="Title *"><input value={p.title} onChange={(e) => set('title', e.target.value)} className="input" /></L>
-            <L t="Description"><textarea value={p.description || ''} onChange={(e) => set('description', e.target.value)} className="input !h-28 py-3" /></L>
+            <div><div className="flex items-center justify-between mb-1"><span className="meta opacity-60">Description — leave empty to auto-write on save</span>
+              <button type="button" onClick={() => { if (!p.title) return setMsg('Add a title first.'); set('description', autoDesc()); }} className="meta border border-ink/20 hover:border-ink px-2.5 py-1.5">✨ Auto-write</button></div>
+              <textarea value={p.description || ''} onChange={(e) => set('description', e.target.value)} placeholder="Auto-written from the title, collection, fit, fabric, tags and colours if left empty." className="input !h-32 py-3" /></div>
             <div className="grid grid-cols-2 gap-3">
               <L t="Price ৳ *"><input type="number" value={p.price} onChange={(e) => set('price', +e.target.value)} className="input" /></L>
               <L t="Compare-at price ৳ (for discount)"><input type="number" value={p.compare_price || ''} onChange={(e) => set('compare_price', e.target.value ? +e.target.value : null)} className="input" /></L>
