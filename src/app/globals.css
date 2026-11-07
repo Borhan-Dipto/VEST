@@ -49,7 +49,13 @@ body { font-family: var(--font-sans); overflow-x: hidden; }
 @media (prefers-reduced-motion: reduce) { .marquee, .reveal { animation: none; } .img-zoom img { transition: none; } }
 
 /* VEST gold wordmark + metallic V */
-.brand-mark { display: inline-flex; align-items: center; gap: 12px; }
-.brand-mark img { height: 26px; width: auto; filter: drop-shadow(0 1px 0 rgba(0,0,0,.25)); }
-.brand-mark span { font-family: var(--font-sans); font-weight: 400; font-size: 22px; letter-spacing: .42em; margin-right: -.42em; text-transform: uppercase; }
+.brand-mark { display: inline-flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.brand-mark img { height: 20px; width: auto; filter: drop-shadow(0 1px 0 rgba(0,0,0,.25)); }
+.brand-mark span { font-family: var(--font-sans); font-weight: 400; font-size: 16px; letter-spacing: .3em; margin-right: -.3em; text-transform: uppercase; }
+@media (min-width: 400px) { .brand-mark { gap: 10px; } .brand-mark img { height: 24px; } .brand-mark span { font-size: 19px; letter-spacing: .38em; margin-right: -.38em; } }
+@media (min-width: 768px) { .brand-mark { gap: 12px; } .brand-mark img { height: 26px; } .brand-mark span { font-size: 22px; letter-spacing: .42em; margin-right: -.42em; } }
+/* Responsive safety: grid/flex children may shrink, long words wrap instead of widening the page */
+.grid > * { min-width: 0; }
+.display { overflow-wrap: break-word; }
+img, svg, video { max-width: 100%; }
 .text-gold-sheen { background: linear-gradient(180deg, #F0D696 0%, #BE9A58 45%, #7A5C2A 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }

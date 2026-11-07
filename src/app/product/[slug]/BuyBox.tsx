@@ -44,7 +44,7 @@ export default function BuyBox({ p, chart = [], note }: { p: Product; chart?: (s
 
       <div className="md:col-span-5 md:sticky md:top-24 self-start">
         <div className="meta opacity-60">{p.collection?.title} · {p.variants[0]?.sku.split('-')[0]}</div>
-        <h1 className="display text-6xl md:text-7xl mt-2">{p.title}</h1>
+        <h1 className="display text-5xl sm:text-6xl md:text-7xl mt-2">{p.title}</h1>
         <div className="flex items-baseline gap-3 mt-4">
           <span className="text-2xl font-medium">৳{p.price}</span>
           {off > 0 && <><span className="line-through opacity-40">৳{p.compare_price}</span><span className="meta bg-signal px-2 py-1">Save {off}%</span></>}
