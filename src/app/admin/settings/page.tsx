@@ -16,12 +16,13 @@ const SECTIONS: [string, string, string][] = [
   ['seo', 'Site SEO', 'Default title and description for Google and link previews.'],
   ['social', 'Social links & contact', 'Full URLs, e.g. https://instagram.com/yourpage'],
   ['policies', 'Policy pages', 'Each new line becomes a paragraph.'],
+  ['social_post', 'Social auto-post', 'Posts each product to Facebook & Instagram when you publish it. Caption placeholders: {title} {price} {compare} {description} {link} {hashtags}.'],
   ['business', 'Business info (shown on invoices)', 'Name, contact and the thank-you note printed on every invoice.'],
   ['credit', 'Footer developer credit', 'Untick Show to hide it. Note: showing the same credit as another site can link the two brands.'],
 ];
 const LABEL: Record<string, string> = { kicker: 'Small top label', title: 'Headline', title2: 'Headline line 2 (orange)', text: 'Text', cta: 'Button text', link: 'Button link', image: 'Image', show: 'Show',
   line1: 'Statement line 1', line2: 'Statement line 2 (orange)', sub: 'Small text under statement', footer: 'Footer big line', inside: 'Inside Dhaka', outside: 'Outside Dhaka', free_over: 'Free delivery over',
-  care: 'Care instructions', delivery: 'Delivery & exchange text', print: 'Print description', size_note: 'Size guide note', size_chart: 'Size chart', items: 'Items', sizes: 'Sizes', colors: 'Colours', body: 'Text', description: 'Description', name: 'Business name', phone: 'Phone', email: 'Email', website: 'Website', address: 'Address', invoice_note: 'Invoice thank-you note' };
+  care: 'Care instructions', delivery: 'Delivery & exchange text', print: 'Print description', size_note: 'Size guide note', size_chart: 'Size chart', items: 'Items', sizes: 'Sizes', colors: 'Colours', body: 'Text', description: 'Description', name: 'Business name', phone: 'Phone', email: 'Email', website: 'Website', address: 'Address', invoice_note: 'Invoice thank-you note', enabled: 'Auto-post is on', facebook: 'Post to Facebook', instagram: 'Post to Instagram', caption: 'Caption template', hashtags: 'Hashtags' };
 const NUMERIC = new Set(['inside', 'outside', 'free_over']);
 
 export default function Settings() {
@@ -31,7 +32,7 @@ export default function Settings() {
   useEffect(() => { db.from('settings').select('key,value').then(({ data }) => setS(Object.fromEntries((data || []).map((r) => [r.key, r.value])))); }, []);
 
   const save = async (key: string) => {
-    const { error } = await db.from('settings').upsert({ key, value: s[key], public: true });
+    const { error } = await db.from('settings').upsert({ key, value: s[key], public: key !== 'social_post' });
     setMsg({ ...msg, [key]: error ? error.message : 'Saved ✓ — live in a few seconds' });
     if (!error) refreshSite();
   };
@@ -85,7 +86,7 @@ function Field({ name, value, onChange }: { name: string; value: any; onChange: 
       ))}
     </div>
   );
-  const long = ['text', 'body', 'care', 'delivery', 'print', 'description'].includes(name) || String(value || '').length > 70;
+  const long = ['text', 'body', 'care', 'delivery', 'print', 'description', 'caption'].includes(name) || String(value || '').length > 70;
   return <L t={label}>{long ? <textarea value={value || ''} onChange={(e) => onChange(e.target.value)} className="input !h-24 py-3" /> : <input value={value || ''} onChange={(e) => onChange(e.target.value)} className="input" />}</L>;
 }
 const L = ({ t, children }: { t: string; children: React.ReactNode }) => <label className="block"><span className="meta opacity-60 block mb-1">{t}</span>{children}</label>;

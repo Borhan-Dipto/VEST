@@ -2,10 +2,10 @@
 import { use, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { db, upload, slugify, refreshSite } from '@/lib/admin';
+import { db, upload, slugify, refreshSite, postToSocials } from '@/lib/admin';
 
 const BLANK = { title: '', slug: '', description: '', price: 850, compare_price: null as number | null, collection_id: '', badge: '', fabric: '100% Cotton', gsm: 180, fit: 'Oversized',
-  status: 'draft', featured: false, tags: [] as string[], seo_title: '', seo_desc: '' };
+  status: 'draft', featured: false, tags: [] as string[], seo_title: '', seo_desc: '', social_skip: false };
 type Img = { url: string };
 
 export default function ProductEdit({ params }: { params: Promise<{ id: string }> }) {
@@ -21,6 +21,7 @@ export default function ProductEdit({ params }: { params: Promise<{ id: string }
   const [cols, setCols] = useState<any[]>([]);
   const [busy, setBusy] = useState(false); const [msg, setMsg] = useState(''); const [up, setUp] = useState(false);
   const [defStock, setDefStock] = useState(10);
+  const [social, setSocial] = useState('');
 
   useEffect(() => {
     db.from('collections').select('id,title').order('sort').then(({ data }) => setCols(data || []));
@@ -59,7 +60,7 @@ export default function ProductEdit({ params }: { params: Promise<{ id: string }
     setBusy(true); setMsg('');
     const row = { ...p, slug: asCopy ? `${p.slug}-copy-${Date.now() % 10000}` : p.slug, title: asCopy ? `${p.title} (copy)` : p.title, status: asCopy ? 'draft' : p.status,
       collection_id: p.collection_id || null, badge: p.badge || null, compare_price: p.compare_price || null, seo_title: p.seo_title || null, seo_desc: p.seo_desc || null };
-    delete row.id; delete row.created_at; delete row.sold_count;
+    delete row.id; delete row.created_at; delete row.sold_count; delete row.social_posted_at; delete row.social_ref;
     const q = isNew || asCopy ? db.from('products').insert(row).select('id').single() : db.from('products').update(row).eq('id', id).select('id').single();
     const { data, error } = await q;
     if (error) { setBusy(false); return setMsg(error.message.includes('duplicate') ? 'That URL (slug) is already used by another product.' : error.message); }
@@ -81,6 +82,10 @@ export default function ProductEdit({ params }: { params: Promise<{ id: string }
       }
     }
     refreshSite(); setBusy(false); setMsg('Saved ✓');
+    if (row.status === 'published' && !row.social_skip && (isNew || asCopy || !p.social_posted_at)) {
+      setSocial('Posting to Facebook & Instagram…');
+      postToSocials(pid).then((m) => { setSocial(m); if (m.includes('✓')) setP((x: any) => ({ ...x, social_posted_at: new Date().toISOString() })); });
+    }
     if (isNew || asCopy) router.replace(`/admin/products/${pid}`);
   };
 
@@ -158,6 +163,13 @@ export default function ProductEdit({ params }: { params: Promise<{ id: string }
               <L t="GSM"><input type="number" value={p.gsm || ''} onChange={(e) => set('gsm', +e.target.value)} className="input" /></L>
               <L t="Fit"><select value={p.fit || ''} onChange={(e) => set('fit', e.target.value)} className="input">{['Oversized', 'Regular', 'Boxy', 'Slim'].map((f) => <option key={f}>{f}</option>)}</select></L>
             </div>
+          </section>
+          <section className="bg-card p-4 space-y-3">
+            <div className="meta">Social media</div>
+            <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={!p.social_skip} onChange={(e) => set('social_skip', !e.target.checked)} /> Auto-post to Facebook & Instagram when published</label>
+            <p className="text-sm opacity-60">{p.social_posted_at ? `Posted on ${new Date(p.social_posted_at).toLocaleString('en-GB', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })}` : 'Not posted yet'}</p>
+            {social && <p className={`text-sm ${social.includes('fail') || social.includes('Facebook:') || social.includes('Instagram:') ? 'text-signal' : ''}`}>{social}</p>}
+            {!isNew && p.status === 'published' && <button type="button" onClick={async () => { setSocial('Posting…'); const m = await postToSocials(id, true); setSocial(m); if (m.includes('✓')) setP((x: any) => ({ ...x, social_posted_at: new Date().toISOString() })); }} className="btn btn-ghost !h-10 w-full">{p.social_posted_at ? 'Post again' : 'Post to socials now'}</button>}
           </section>
           {!isNew && <button onClick={archive} className="meta text-signal underline">Archive product</button>}
         </div>
