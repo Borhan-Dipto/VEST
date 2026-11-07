@@ -1,26 +1,42 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --color-ink: #111111;
+  --color-paper: #F5F2EC;
+  --color-card: #FFFFFF;
+  --color-warm: #D8D4CC;
+  --color-lime: #D8FF3E;
+  --color-signal: #FF5738;
+  --font-display: 'Anton', Impact, sans-serif;
+  --font-sans: 'Space Grotesk', system-ui, sans-serif;
+  --font-serif: 'Instrument Serif', Georgia, serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+html { background: var(--color-paper); color: var(--color-ink); -webkit-tap-highlight-color: transparent; }
+body { font-family: var(--font-sans); overflow-x: hidden; }
+::selection { background: var(--color-lime); color: var(--color-ink); }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+.display { font-family: var(--font-display); text-transform: uppercase; line-height: .86; letter-spacing: -.01em; }
+.meta { font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; }
+.wrap { max-width: 1440px; margin: 0 auto; padding: 0 16px; }
+@media (min-width: 768px) { .wrap { padding: 0 32px; } }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-}
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; height: 48px; padding: 0 24px;
+  background: var(--color-ink); color: var(--color-paper); font-family: var(--font-mono); font-size: 12px; letter-spacing: .1em;
+  text-transform: uppercase; transition: background .2s, color .2s, transform .1s; }
+.btn:hover { background: var(--color-lime); color: var(--color-ink); }
+.btn:active { transform: scale(.98); }
+.btn:disabled { opacity: .4; pointer-events: none; }
+.btn-ghost { background: transparent; color: var(--color-ink); box-shadow: inset 0 0 0 1px var(--color-ink); }
+.input { width: 100%; height: 48px; padding: 0 14px; background: var(--color-card); border: 1px solid var(--color-warm); outline: none; font-size: 15px; }
+.input:focus { border-color: var(--color-ink); }
+
+.marquee { display: flex; width: max-content; animation: mq 28s linear infinite; }
+@keyframes mq { to { transform: translateX(-50%); } }
+.reveal { animation: rv .9s cubic-bezier(.2,.7,.2,1) both; }
+@keyframes rv { from { opacity: 0; transform: translateY(40px); } }
+.img-zoom img { transition: transform .7s cubic-bezier(.2,.7,.2,1); }
+.img-zoom:hover img { transform: scale(1.05); }
+
+@media (prefers-reduced-motion: reduce) { .marquee, .reveal { animation: none; } .img-zoom img { transition: none; } }
