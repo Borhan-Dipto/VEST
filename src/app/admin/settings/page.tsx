@@ -16,13 +16,13 @@ const SECTIONS: [string, string, string][] = [
   ['seo', 'Site SEO', 'Default title and description for Google and link previews.'],
   ['social', 'Social links & contact', 'Full URLs, e.g. https://instagram.com/yourpage'],
   ['policies', 'Policy pages', 'Each new line becomes a paragraph.'],
-  ['social_post', 'Social auto-post', 'Posts each product to Facebook & Instagram when you publish it. Caption placeholders: {title} {price} {compare} {description} {link} {hashtags}.'],
+  ['social_post', 'Social auto-post', 'Posts each product to Facebook & Instagram when you publish it. Placeholders: {title} {price} {compare} {description} {link} {hashtags} {cta}. {cta} becomes the Facebook/Instagram call-to-action line below.'],
   ['business', 'Business info (shown on invoices)', 'Name, contact and the thank-you note printed on every invoice.'],
   ['credit', 'Footer developer credit', 'Untick Show to hide it. Note: showing the same credit as another site can link the two brands.'],
 ];
 const LABEL: Record<string, string> = { kicker: 'Small top label', title: 'Headline', title2: 'Headline line 2 (orange)', text: 'Text', cta: 'Button text', link: 'Button link', image: 'Image', show: 'Show',
   line1: 'Statement line 1', line2: 'Statement line 2 (orange)', sub: 'Small text under statement', footer: 'Footer big line', inside: 'Inside Dhaka', outside: 'Outside Dhaka', free_over: 'Free delivery over',
-  care: 'Care instructions', delivery: 'Delivery & exchange text', print: 'Print description', size_note: 'Size guide note', size_chart: 'Size chart', items: 'Items', sizes: 'Sizes', colors: 'Colours', body: 'Text', description: 'Description', name: 'Business name', phone: 'Phone', email: 'Email', website: 'Website', address: 'Address', invoice_note: 'Invoice thank-you note', enabled: 'Auto-post is on', facebook: 'Post to Facebook', instagram: 'Post to Instagram', caption: 'Caption template', hashtags: 'Hashtags' };
+  care: 'Care instructions', delivery: 'Delivery & exchange text', print: 'Print description', size_note: 'Size guide note', size_chart: 'Size chart', items: 'Items', sizes: 'Sizes', colors: 'Colours', body: 'Text', description: 'Description', name: 'Business name', phone: 'Phone', email: 'Email', website: 'Website', address: 'Address', invoice_note: 'Invoice thank-you note', enabled: 'Auto-post is on', facebook: 'Post to Facebook', instagram: 'Post to Instagram', caption: 'Caption template', hashtags: 'Hashtags', link_in_comment: 'Put the order link in the first comment (recommended)', comment: 'First comment text', fb_cta: 'Facebook {cta} text', ig_cta: 'Instagram {cta} text' };
 const NUMERIC = new Set(['inside', 'outside', 'free_over']);
 
 export default function Settings() {
