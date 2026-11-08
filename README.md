@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./docs/cover.svg" alt="VEST — e-commerce store with social automation" width="720" />
+  <img src="./docs/cover.svg" alt="VEST — e-commerce store with social automation" width="100%" />
 </p>
 
 <p align="center">
